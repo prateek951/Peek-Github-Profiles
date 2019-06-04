@@ -34,9 +34,9 @@ class AppNavbar extends Component {
 //   icon: "fab fa-github"
 // };
 
-AppNavbar.propTypes = {
-  title: PropTypes.string.isRequired,
-  icon: PropTypes.string.isRequired
-};
+// AppNavbar.propTypes = {
+//   title: PropTypes.string.isRequired,
+//   icon: PropTypes.string.isRequired
+// };
 
 export default AppNavbar;
