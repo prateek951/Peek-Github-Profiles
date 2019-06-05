@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 class SearchBar extends Component {
   constructor(props) {
@@ -9,6 +10,10 @@ class SearchBar extends Component {
     };
     this.bindEvents();
   }
+  static propTypes = {
+    searchUsers: PropTypes.func.isRequired
+  };
+
   bindEvents() {
     this.handleStringChange = this.handleStringChange.bind(this);
     this.handleSearch = this.handleSearch.bind(this);
@@ -22,7 +27,10 @@ class SearchBar extends Component {
     this.setState({ term: "" });
   }
   render() {
-    const { term } = this.state;
+    const {
+      state: { term },
+      props: { show }
+    } = this;
     return (
       <div>
         <form onSubmit={this.handleSearch}>
@@ -39,6 +47,14 @@ class SearchBar extends Component {
             className="btn btn-dark btn-block"
           />
         </form>
+        {show && (
+          <button
+            className="btn btn-light btn-block"
+            onClick={this.props.clearUsers}
+          >
+            Clear
+          </button>
+        )}
       </div>
     );
   }

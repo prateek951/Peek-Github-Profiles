@@ -43,7 +43,10 @@ class App extends React.Component {
       this.setState({ loading: false, error: error });
     }
   };
-
+  clearUsers = () => {
+    // console.log("inside the clearUsers method");
+    this.setState({ users: [], loading: false });
+  };
   render() {
     const { users, loading, error } = this.state;
     return (
@@ -51,7 +54,11 @@ class App extends React.Component {
         <AppNavbar title="GitProfile" icon="fab fa-github" />
         <h2 className="text-center">{error ? error : null}</h2>
         <div className="container">
-          <SearchBar searchUsers={this.searchUsers} />
+          <SearchBar
+            show={!!users.length}
+            clearUsers={this.clearUsers}
+            searchUsers={this.searchUsers}
+          />
           <Users loading={loading} users={users} />
         </div>
       </div>
