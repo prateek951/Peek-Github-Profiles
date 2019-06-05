@@ -4,24 +4,19 @@ import "./App.css";
 import AppNavbar from "./components/layouts/AppNavbar";
 import Users from "./components/users/Users";
 import SearchBar from "./components/users/SearchBar";
+import Alert from "./components/users/Alert";
 
 class App extends React.Component {
   state = {
     users: [],
     error: "",
+    alert: false,
     loading: false
   };
+
+  // Utility method to search the users
   searchUsers = async term => {
     console.log(term);
-
-    if (!term) {
-      this.setState({
-        users: [],
-        loading: false,
-        error: "No users pertaining to the handle found"
-      });
-      return;
-    }
     this.setState({ loading: true });
     try {
       const {
@@ -43,18 +38,36 @@ class App extends React.Component {
       this.setState({ loading: false, error: error });
     }
   };
+  // Utility method to clear the users
+
   clearUsers = () => {
     // console.log("inside the clearUsers method");
     this.setState({ users: [], loading: false });
   };
+
+  // Utility method to set the alert
+
+  setAlert = alertMessage => {
+    this.setState({
+      users: [],
+      loading: false,
+      error: alertMessage,
+      alert: true
+    });
+  };
+
+  // Utility method to close the alert
+  closeAlert = () => this.setState({ alert: false, error: "" });
+
   render() {
-    const { users, loading, error } = this.state;
+    const { users, loading, error, alert } = this.state;
     return (
       <div className="App">
         <AppNavbar title="GitProfile" icon="fab fa-github" />
-        <h2 className="text-center">{error ? error : null}</h2>
+        {alert ? <Alert closeAlert={this.closeAlert} error={error} /> : null}
         <div className="container">
           <SearchBar
+            setAlert={this.setAlert}
             show={!!users.length}
             clearUsers={this.clearUsers}
             searchUsers={this.searchUsers}

@@ -11,7 +11,10 @@ class SearchBar extends Component {
     this.bindEvents();
   }
   static propTypes = {
-    searchUsers: PropTypes.func.isRequired
+    searchUsers: PropTypes.func.isRequired,
+    setAlert: PropTypes.func.isRequired,
+    show: PropTypes.bool.isRequired,
+    clearUsers: PropTypes.func.isRequired
   };
 
   bindEvents() {
@@ -23,13 +26,18 @@ class SearchBar extends Component {
   }
   handleSearch(e) {
     e.preventDefault();
-    this.props.searchUsers(this.state.term);
-    this.setState({ term: "" });
+    const { term } = this.state;
+    if (term === "" ||  term.trim().length === 0) {
+      this.props.setAlert("Please specify a github handle", "danger");
+    } else {
+      this.props.searchUsers(term);
+      this.setState({ term: "" });
+    }
   }
   render() {
     const {
       state: { term },
-      props: { show }
+      props: { show, clearUsers }
     } = this;
     return (
       <div>
@@ -45,13 +53,11 @@ class SearchBar extends Component {
             type="submit"
             value="Search"
             className="btn btn-dark btn-block"
+            value="Search"
           />
         </form>
         {show && (
-          <button
-            className="btn btn-light btn-block"
-            onClick={this.props.clearUsers}
-          >
+          <button className="btn btn-light btn-block" onClick={clearUsers}>
             Clear
           </button>
         )}
