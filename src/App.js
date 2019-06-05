@@ -7,7 +7,7 @@ import Users from "./components/users/Users";
 import SearchBar from "./components/users/SearchBar";
 import Alert from "./components/users/Alert";
 import PageAbout from "./components/pages/PageAbout";
-
+import PageUser from "./components/pages/PageUser";
 class App extends React.Component {
   state = {
     users: [],
@@ -90,6 +90,7 @@ class App extends React.Component {
                 )}
               />
               <Route path="/about" exact component={PageAbout} />
+              <Route path="/users/:id" exact component={PageUser} />
             </Switch>
           </div>
         </div>
