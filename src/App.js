@@ -117,6 +117,7 @@ class App extends React.Component {
                     {...props}
                     getUser={this.getUser}
                     user={currentUser}
+                    loading={loading}
                   />
                 )}
               />
