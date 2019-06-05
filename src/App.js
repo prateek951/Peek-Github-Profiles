@@ -12,6 +12,7 @@ import PageUser from "./components/pages/PageUser";
 class App extends React.Component {
   state = {
     users: [],
+    repos: [],
     error: "",
     alert: false,
     loading: false,
@@ -58,6 +59,22 @@ class App extends React.Component {
       this.setState({ loading: false, currentUser: {} });
     }
   };
+  // Utility method to get a single user's repositories
+  getRepos = async username => {
+    this.setState({ loading: true });
+    try {
+      const { data } = await axios.get(
+        `https://api.github.com/users/${username}/repos?per_page=5&sort=created:asc&client_id=${
+          process.env.REACT_APP_GITHUB_CLIENT_ID
+        }&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+      );
+      // console.log(data);
+      this.setState({ loading: false, repos: data });
+    } catch (ex) {
+      console.log(ex);
+      this.setState({ loading: false, repos: [] });
+    }
+  };
 
   // Utility method to clear the users
 
@@ -81,7 +98,7 @@ class App extends React.Component {
   closeAlert = () => this.setState({ alert: false, error: "" });
 
   render() {
-    const { users, loading, error, alert, currentUser } = this.state;
+    const { users, loading, error, alert, currentUser, repos } = this.state;
     return (
       <Router>
         <div className="App">
@@ -114,9 +131,11 @@ class App extends React.Component {
                 exact
                 render={props => (
                   <PageUser
+                    getRepos={this.getRepos}
                     {...props}
                     getUser={this.getUser}
                     user={currentUser}
+                    repos={repos}
                     loading={loading}
                   />
                 )}

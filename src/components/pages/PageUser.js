@@ -2,21 +2,26 @@ import React, { Fragment, Component } from "react";
 import PropTypes from "prop-types";
 import Spinner from "../layouts/Spinner";
 import { Link } from "react-router-dom";
+import Repos from "../repos/Repos";
 export default class PageUser extends Component {
   static propTypes = {
     getUser: PropTypes.func.isRequired,
+    getRepos: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
+    repos: PropTypes.array.isRequired,
     loading: PropTypes.bool.isRequired
   };
 
   componentDidMount = () => {
     const {
       getUser,
+      getRepos,
       match: {
         params: { id }
       }
     } = this.props;
     getUser(id);
+    getRepos(id);
   };
 
   render() {
@@ -36,7 +41,8 @@ export default class PageUser extends Component {
         public_gists,
         hireable
       },
-      loading
+      loading,
+      repos
     } = this.props;
 
     if (loading) {
@@ -107,6 +113,7 @@ export default class PageUser extends Component {
             </div>
             <div className="badge badge-success">Following: {public_gists}</div>
           </div>
+          <Repos repos={repos} />
         </Fragment>
       );
     }
