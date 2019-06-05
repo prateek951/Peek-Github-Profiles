@@ -1,19 +1,26 @@
-import React, { Component } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 import UserItem from "./UserItem";
-class Users extends Component {
-  render() {
-    const { users, loading } = this.props;
+import Spinner from "../layouts/Spinner";
+
+const Users = ({ users, loading }) => {
+  if (loading) {
+    return <Spinner />;
+  } else {
     return (
       <div style={userStyle}>
-        {users && !loading ? (
-          users.map(user => <UserItem key={user.id} user={user} />)
-        ) : (
-          <h1 className="text-center">Loading...</h1>
-        )}
+        {users.map(user => (
+          <UserItem user={user} key={user.id} />
+        ))}
       </div>
     );
   }
-}
+};
+
+Users.propTypes = {
+  users: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired
+};
 
 const userStyle = {
   display: "grid",

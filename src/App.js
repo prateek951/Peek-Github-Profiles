@@ -14,7 +14,11 @@ class App extends React.Component {
   async componentDidMount() {
     try {
       this.setState({ loading: true });
-      const { data: users } = await axios.get("https://api.github.com/users");
+      const { data: users } = await axios.get(
+        `https://api.github.com/users?client_id=${
+          process.env.REACT_APP_GITHUB_CLIENT_ID
+        }&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+      );
       // ss
       setTimeout(() => {
         this.setState({ users: users, error: "", loading: false });
@@ -31,7 +35,7 @@ class App extends React.Component {
         <AppNavbar title="GitProfile" icon="fab fa-github" />
         <h2 className="text-center">{error ? error : null}</h2>
         <div className="container">
-          <Users loading={loading} users={users}/>
+          <Users loading={loading} users={users} />
         </div>
       </div>
     );
