@@ -8,12 +8,14 @@ import SearchBar from "./components/users/SearchBar";
 import Alert from "./components/users/Alert";
 import PageAbout from "./components/pages/PageAbout";
 import PageUser from "./components/pages/PageUser";
+
 class App extends React.Component {
   state = {
     users: [],
     error: "",
     alert: false,
-    loading: false
+    loading: false,
+    currentUser: {}
   };
 
   // Utility method to search the users
@@ -40,6 +42,23 @@ class App extends React.Component {
       this.setState({ loading: false, error: error });
     }
   };
+  // Utility method to get a single github user
+  getUser = async username => {
+    this.setState({ loading: true });
+    try {
+      const { data } = await axios.get(
+        `https://api.github.com/users/${username}?&client_id=${
+          process.env.REACT_APP_GITHUB_CLIENT_ID
+        }&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+      );
+      // console.log(data);
+      this.setState({ loading: false, currentUser: data });
+    } catch (ex) {
+      console.log(ex);
+      this.setState({ loading: false, currentUser: {} });
+    }
+  };
+
   // Utility method to clear the users
 
   clearUsers = () => {
@@ -62,7 +81,7 @@ class App extends React.Component {
   closeAlert = () => this.setState({ alert: false, error: "" });
 
   render() {
-    const { users, loading, error, alert } = this.state;
+    const { users, loading, error, alert, currentUser } = this.state;
     return (
       <Router>
         <div className="App">
@@ -90,7 +109,17 @@ class App extends React.Component {
                 )}
               />
               <Route path="/about" exact component={PageAbout} />
-              <Route path="/users/:id" exact component={PageUser} />
+              <Route
+                path="/users/:id"
+                exact
+                render={props => (
+                  <PageUser
+                    {...props}
+                    getUser={this.getUser}
+                    user={currentUser}
+                  />
+                )}
+              />
             </Switch>
           </div>
         </div>
