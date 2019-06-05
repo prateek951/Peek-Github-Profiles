@@ -53,7 +53,6 @@ class SearchBar extends Component {
             type="submit"
             value="Search"
             className="btn btn-dark btn-block"
-            value="Search"
           />
         </form>
         {show && (

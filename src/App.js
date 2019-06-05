@@ -1,10 +1,12 @@
-import React from "react";
+import React, { Fragment } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import axios from "axios";
 import "./App.css";
 import AppNavbar from "./components/layouts/AppNavbar";
 import Users from "./components/users/Users";
 import SearchBar from "./components/users/SearchBar";
 import Alert from "./components/users/Alert";
+import PageAbout from "./components/pages/PageAbout";
 
 class App extends React.Component {
   state = {
@@ -62,19 +64,36 @@ class App extends React.Component {
   render() {
     const { users, loading, error, alert } = this.state;
     return (
-      <div className="App">
-        <AppNavbar title="GitProfile" icon="fab fa-github" />
-        {alert ? <Alert closeAlert={this.closeAlert} error={error} /> : null}
-        <div className="container">
-          <SearchBar
-            setAlert={this.setAlert}
-            show={!!users.length}
-            clearUsers={this.clearUsers}
-            searchUsers={this.searchUsers}
-          />
-          <Users loading={loading} users={users} />
+      <Router>
+        <div className="App">
+          <AppNavbar title="GitProfile" icon="fab fa-github" />
+          {alert ? <Alert closeAlert={this.closeAlert} error={error} /> : null}
+          <div className="container">
+            <Switch>
+              {/* Instead of creating a new home component we can make use of the render props 
+            for using the methods that we have defined here in the App Component  
+            in the Home Page without creating any new component for Home. Otherwise we will
+            again be passing props up and down. To prevent that use render props approach */}
+              <Route
+                exact
+                path="/"
+                render={props => (
+                  <Fragment>
+                    <SearchBar
+                      setAlert={this.setAlert}
+                      show={!!users.length}
+                      clearUsers={this.clearUsers}
+                      searchUsers={this.searchUsers}
+                    />
+                    <Users loading={loading} users={users} />
+                  </Fragment>
+                )}
+              />
+              <Route path="/about" exact component={PageAbout} />
+            </Switch>
+          </div>
         </div>
-      </div>
+      </Router>
     );
   }
 }
