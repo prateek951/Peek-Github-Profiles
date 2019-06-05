@@ -16,12 +16,12 @@ class App extends React.Component {
 
     if (!term) {
       this.setState({
+        users: [],
         loading: false,
         error: "No users pertaining to the handle found"
       });
       return;
     }
-
     this.setState({ loading: true });
     try {
       const {
@@ -31,32 +31,19 @@ class App extends React.Component {
           process.env.REACT_APP_GITHUB_CLIENT_ID
         }&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
       );
-      if (users) {
+      if (users && users.length > 0) {
         this.setState({ users: users, error: "", loading: false });
       } else {
-        this.setState({ loading: false, error: "No user pertaining to this handle exists" });
+        this.setState({
+          loading: false,
+          error: "No user pertaining to this handle exists"
+        });
       }
     } catch (error) {
       this.setState({ loading: false, error: error });
     }
   };
-  // async componentDidMount() {
-  //   try {
-  //     this.setState({ loading: true });
-  //     const { data: users } = await axios.get(
-  //       `https://api.github.com/users?client_id=${
-  //         process.env.REACT_APP_GITHUB_CLIENT_ID
-  //       }&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
-  //     );
-  //     // ss
-  //     setTimeout(() => {
-  //       this.setState({ users: users, error: "", loading: false });
-  //     }, 3000);
-  //   } catch (ex) {
-  //     const error = "Failed to fetch the users";
-  //     this.setState({ error: error, loading: false });
-  //   }
-  // }
+
   render() {
     const { users, loading, error } = this.state;
     return (

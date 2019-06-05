@@ -25,7 +25,7 @@ class SearchBar extends Component {
     const { term } = this.state;
     return (
       <div>
-        <form action="form" onSubmit={this.handleSearch}>
+        <form onSubmit={this.handleSearch}>
           <input
             type="text"
             placeholder="Enter a username to filter by"
