@@ -3,6 +3,7 @@ import axios from "axios";
 import "./App.css";
 import AppNavbar from "./components/layouts/AppNavbar";
 import Users from "./components/users/Users";
+import SearchBar from "./components/users/SearchBar";
 
 class App extends React.Component {
   state = {
@@ -10,24 +11,52 @@ class App extends React.Component {
     error: "",
     loading: false
   };
+  searchUsers = async term => {
+    console.log(term);
 
-  async componentDidMount() {
+    if (!term) {
+      this.setState({
+        loading: false,
+        error: "No users pertaining to the handle found"
+      });
+      return;
+    }
+
+    this.setState({ loading: true });
     try {
-      this.setState({ loading: true });
-      const { data: users } = await axios.get(
-        `https://api.github.com/users?client_id=${
+      const {
+        data: { items: users }
+      } = await axios.get(
+        `https://api.github.com/search/users?q=${term}&client_id=${
           process.env.REACT_APP_GITHUB_CLIENT_ID
         }&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
       );
-      // ss
-      setTimeout(() => {
+      if (users) {
         this.setState({ users: users, error: "", loading: false });
-      }, 3000);
-    } catch (ex) {
-      const error = "Failed to fetch the users";
-      this.setState({ error: error, loading: false });
+      } else {
+        this.setState({ loading: false, error: "No user pertaining to this handle exists" });
+      }
+    } catch (error) {
+      this.setState({ loading: false, error: error });
     }
-  }
+  };
+  // async componentDidMount() {
+  //   try {
+  //     this.setState({ loading: true });
+  //     const { data: users } = await axios.get(
+  //       `https://api.github.com/users?client_id=${
+  //         process.env.REACT_APP_GITHUB_CLIENT_ID
+  //       }&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+  //     );
+  //     // ss
+  //     setTimeout(() => {
+  //       this.setState({ users: users, error: "", loading: false });
+  //     }, 3000);
+  //   } catch (ex) {
+  //     const error = "Failed to fetch the users";
+  //     this.setState({ error: error, loading: false });
+  //   }
+  // }
   render() {
     const { users, loading, error } = this.state;
     return (
@@ -35,6 +64,7 @@ class App extends React.Component {
         <AppNavbar title="GitProfile" icon="fab fa-github" />
         <h2 className="text-center">{error ? error : null}</h2>
         <div className="container">
+          <SearchBar searchUsers={this.searchUsers} />
           <Users loading={loading} users={users} />
         </div>
       </div>
