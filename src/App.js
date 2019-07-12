@@ -8,7 +8,7 @@ import SearchBar from './components/users/SearchBar';
 import Alert from './components/users/Alert';
 import PageAbout from './components/pages/PageAbout';
 import PageUser from './components/pages/PageUser';
-
+import GithubState from './contexts/github/GithubState';
 const App = () => {
   const [users, setUsers] = useState([]);
   const [repos, setRepos] = useState([]);
@@ -104,6 +104,10 @@ const App = () => {
   };
 
   return (
+    
+    <GithubState>
+
+
     <Router>
       <div className="App">
         <AppNavbar title="GitProfile" icon="fab fa-github" />
@@ -148,6 +152,7 @@ const App = () => {
         </div>
       </div>
     </Router>
+    </GithubState>
   );
 };
 
