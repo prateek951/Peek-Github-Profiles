@@ -1,18 +1,18 @@
-import React, { Fragment } from "react";
-import PropTypes from "prop-types";
-
-const Alert = ({ error, closeAlert }) => (
-  <Fragment>
-    {error ? (
-      <h2 className="text-center alert-primary">
-        {error}{" "}
-        <span className="btn btn-danger" onClick={closeAlert}>
-          X
-        </span>
-      </h2>
-    ) : null}
-  </Fragment>
-);
+import React, { useContext, Fragment } from 'react';
+import PropTypes from 'prop-types';
+import AlertContext from '../../contexts/alert/AlertContext';
+const Alert = () => {
+  const { alert } = useContext(AlertContext);
+  return (
+    <Fragment>
+      {alert !== null && (
+        <div className={`alert alert-${alert.type}`}>
+          <i className="fas fa-info-circle" /> {alert.message}
+        </div>
+      )}
+    </Fragment>
+  );
+};
 
 Alert.propTypes = {
   error: PropTypes.string.isRequired,

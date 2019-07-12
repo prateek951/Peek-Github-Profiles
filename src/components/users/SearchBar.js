@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
-import PropTypes from 'prop-types';
-
 import GithubContext from '../../contexts/github/GithubContext';
-const SearchBar = ({ setAlert }) => {
+import AlertContext from '../../contexts/alert/AlertContext';
+const SearchBar = () => {
+  const { setAlert } = useContext(AlertContext)
   const [term, setTerm] = useState('');
   const handleStringChange = event => {
     setTerm(event.target.value);
@@ -43,8 +43,5 @@ const SearchBar = ({ setAlert }) => {
   );
 };
 
-SearchBar.propTypes = {
-  setAlert: PropTypes.func.isRequired
-};
 
 export default SearchBar;
