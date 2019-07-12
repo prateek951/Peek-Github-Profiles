@@ -1,18 +1,20 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-
-const SearchBar = ({ searchUsers, setAlert, show, clearUsers }) => {
-  const [term, setTerm] = useState("");
+import React, { useState, useContext } from 'react';
+import PropTypes from 'prop-types';
+import GithubContext from '../../contexts/github/GithubContext';
+const SearchBar = ({ setAlert, show, clearUsers }) => {
+  const [term, setTerm] = useState('');
   const handleStringChange = event => {
     setTerm(event.target.value);
   };
+  const { searchUsers } = useContext(GithubContext);
+
   const handleSearch = event => {
     event.preventDefault();
-    if (term === "" || term.trim().length === 0) {
-      setAlert("Please specify a github handle", "danger");
+    if (term === '' || term.trim().length === 0) {
+      setAlert('Please specify a github handle', 'danger');
     } else {
       searchUsers(term);
-      setTerm("");
+      setTerm('');
     }
   };
   return (
@@ -41,7 +43,6 @@ const SearchBar = ({ searchUsers, setAlert, show, clearUsers }) => {
 };
 
 SearchBar.propTypes = {
-  searchUsers: PropTypes.func.isRequired,
   setAlert: PropTypes.func.isRequired,
   show: PropTypes.bool.isRequired,
   clearUsers: PropTypes.func.isRequired

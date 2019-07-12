@@ -1,11 +1,17 @@
-import { SEARCH_USERS } from '../../types';
+import { SEARCH_USERS, SET_LOADING } from '../../types';
 
 const GithubReducer = (state, action) => {
   switch (action.type) {
+    case SET_LOADING:
+      return {
+        ...state,
+        loading: true
+      };
     case SEARCH_USERS:
       return {
         ...state,
-        users: state.users.filter(user => user.username.includes(action.term))
+        users: action.users,
+        loading: false
       };
 
     default:

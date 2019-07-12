@@ -26,14 +26,25 @@ const GithubState = props => {
    * @desc Actions go here
    */
 
-  const searchUsers = term => {
+  const searchUsers = async term => {
     console.log('Getting the list of the users');
-    dispatch({ type: SEARCH_USERS, term: term });
+    setLoading();
+    const {
+      data: { items: users }
+    } = await axios.get(
+      `https://api.github.com/search/users?q=${term}&client_id=${
+        process.env.REACT_APP_GITHUB_CLIENT_ID
+      }&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+    );
+    dispatch({ type: SEARCH_USERS, users: users });
   };
   const getUser = id => console.log('Getting the user');
   const getRepos = id => console.log('Getting the entire list of the repos');
   const clearUsers = () => console.log('Clear the list of all the users');
-  const setLoading = () => console.log('Setting the loading thing');
+  const setLoading = () => {
+    console.log('Setting the loading thing');
+    dispatch({ type: SET_LOADING });
+  };
   // 2. Make use of the useReducer hook since we will dispatch the actions
   const [state, dispatch] = useReducer(GithubReducer, initialState);
 
@@ -43,6 +54,7 @@ const GithubState = props => {
     <GithubContext.Provider
       value={{
         user: state.user,
+        users: state.users,
         repos: state.repos,
         loading: state.loading,
         searchUsers,
