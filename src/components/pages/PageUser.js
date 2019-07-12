@@ -5,8 +5,6 @@ import { Link } from 'react-router-dom';
 import Repos from '../repos/Repos';
 import GithubContext from '../../contexts/github/GithubContext';
 const PageUser = ({
-  repos,
-  getRepos,
   match: {
     params: { id }
   }
@@ -14,8 +12,8 @@ const PageUser = ({
   const {
     user: {
       name,
-      avatar_url,
       location,
+      avatar_url,
       company,
       bio,
       blog,
@@ -28,7 +26,8 @@ const PageUser = ({
       hireable
     },
     loading,
-    getUser
+    getUser,
+    getRepos
   } = useContext(GithubContext);
 
   useEffect(() => {
@@ -103,14 +102,9 @@ const PageUser = ({
           <div className="badge badge-light">Public Repos: {public_repos}</div>
           <div className="badge badge-success">Following: {public_gists}</div>
         </div>
-        <Repos repos={repos} />
+        <Repos />
       </Fragment>
     );
   }
 };
-PageUser.propTypes = {
-  getRepos: PropTypes.func.isRequired,
-  repos: PropTypes.array.isRequired
-};
-
 export default PageUser;

@@ -39,17 +39,26 @@ const GithubState = props => {
     dispatch({ type: SEARCH_USERS, users: users });
   };
   // Utility method to get a single github user
-  const getUser = async username => {
+  const getUser = async id => {
     setLoading();
     const { data: user } = await axios.get(
-      `https://api.github.com/users/${username}?&client_id=${
+      `https://api.github.com/users/${id}?&client_id=${
         process.env.REACT_APP_GITHUB_CLIENT_ID
       }&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
     );
     // console.log(data);
     dispatch({ type: GET_USER, user: user });
   };
-  const getRepos = id => console.log('Getting the entire list of the repos');
+  const getRepos = async id => {
+    setLoading(true);
+    const { data: repos } = await axios.get(
+      `https://api.github.com/users/${id}/repos?per_page=5&sort=created:asc&client_id=${
+        process.env.REACT_APP_GITHUB_CLIENT_ID
+      }&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+    );
+    // console.log(data);
+    dispatch({ type: GET_REPOS, repos: repos });
+  };
   const clearUsers = () => {
     console.log('Clearing up the users');
     dispatch({ type: CLEAR_USERS });
