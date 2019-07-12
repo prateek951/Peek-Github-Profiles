@@ -9,6 +9,18 @@ import {
   CLEAR_USERS,
   SET_LOADING
 } from '../../types';
+
+let GITHUB_CLIENT_ID;
+let GITHUB_CLIENT_SECRET;
+
+if (process.env.NODE_ENV !== 'production') {
+  GITHUB_CLIENT_ID = process.env.REACT_APP_GITHUB_CLIENT_ID;
+  GITHUB_CLIENT_SECRET = process.env.REACT_APP_GITHUB_CLIENT_SECRET;
+} else {
+  GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
+  GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
+}
+
 const GithubState = props => {
   // 1. Create the initial state
   /**
@@ -52,9 +64,9 @@ const GithubState = props => {
   const getRepos = async id => {
     setLoading(true);
     const { data: repos } = await axios.get(
-      `https://api.github.com/users/${id}/repos?per_page=5&sort=created:asc&client_id=${
-        process.env.REACT_APP_GITHUB_CLIENT_ID
-      }&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+      `https://api.github.com/users/${id}/repos?per_page=5&sort=created:asc&client_id=${GITHUB_CLIENT_ID}&client_secret=${
+        process.env.GITHUB_CLIENT_SECRET
+      }`
     );
     // console.log(data);
     dispatch({ type: GET_REPOS, repos: repos });
