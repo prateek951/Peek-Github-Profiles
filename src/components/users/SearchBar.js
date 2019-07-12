@@ -1,12 +1,13 @@
 import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
+
 import GithubContext from '../../contexts/github/GithubContext';
-const SearchBar = ({ setAlert, show, clearUsers }) => {
+const SearchBar = ({ setAlert }) => {
   const [term, setTerm] = useState('');
   const handleStringChange = event => {
     setTerm(event.target.value);
   };
-  const { searchUsers } = useContext(GithubContext);
+  const { users, searchUsers, clearUsers } = useContext(GithubContext);
 
   const handleSearch = event => {
     event.preventDefault();
@@ -33,7 +34,7 @@ const SearchBar = ({ setAlert, show, clearUsers }) => {
           className="btn btn-dark btn-block"
         />
       </form>
-      {show && (
+      {users.length > 0 && (
         <button className="btn btn-light btn-block" onClick={clearUsers}>
           Clear
         </button>
@@ -43,9 +44,7 @@ const SearchBar = ({ setAlert, show, clearUsers }) => {
 };
 
 SearchBar.propTypes = {
-  setAlert: PropTypes.func.isRequired,
-  show: PropTypes.bool.isRequired,
-  clearUsers: PropTypes.func.isRequired
+  setAlert: PropTypes.func.isRequired
 };
 
 export default SearchBar;

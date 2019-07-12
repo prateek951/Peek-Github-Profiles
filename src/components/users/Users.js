@@ -1,12 +1,18 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 import UserItem from './UserItem';
 import Spinner from '../layouts/Spinner';
 import GithubContext from '../../contexts/github/GithubContext';
-const Users = ({ loading }) => {
-  const { users } = useContext(GithubContext);
+const Users = () => {
+  const { users, loading } = useContext(GithubContext);
   if (loading) {
     return <Spinner />;
+  } else if (!users) {
+    return (
+      <h1>
+        We were unable to find profiles that resemble closely with the provided
+        userid
+      </h1>
+    );
   } else {
     return (
       <div style={userStyle}>
@@ -16,11 +22,6 @@ const Users = ({ loading }) => {
       </div>
     );
   }
-};
-
-Users.propTypes = {
-  users: PropTypes.array.isRequired,
-  loading: PropTypes.bool.isRequired
 };
 
 const userStyle = {

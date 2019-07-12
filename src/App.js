@@ -10,32 +10,30 @@ import PageAbout from './components/pages/PageAbout';
 import PageUser from './components/pages/PageUser';
 import GithubState from './contexts/github/GithubState';
 const App = () => {
-  const [users, setUsers] = useState([]);
   const [repos, setRepos] = useState([]);
-  const [currentUser, setCurrentUser] = useState({});
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState(false);
   const [error, setError] = useState('');
   // Utility method to search the users
   // const searchUsers = async term => {};
-  // Utility method to get a single github user
-  const getUser = async username => {
-    setLoading(true);
-    try {
-      const { data: user } = await axios.get(
-        `https://api.github.com/users/${username}?&client_id=${
-          process.env.REACT_APP_GITHUB_CLIENT_ID
-        }&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
-      );
-      // console.log(data);
-      setLoading(false);
-      setCurrentUser(user);
-    } catch (ex) {
-      console.log(ex);
-      setLoading(false);
-      setCurrentUser({});
-    }
-  };
+  // // Utility method to get a single github user
+  // const getUser = async username => {
+  //   setLoading(true);
+  //   try {
+  //     const { data: user } = await axios.get(
+  //       `https://api.github.com/users/${username}?&client_id=${
+  //         process.env.REACT_APP_GITHUB_CLIENT_ID
+  //       }&client_secret=${process.env.REACT_APP_GITHUB_CLIENT_SECRET}`
+  //     );
+  //     // console.log(data);
+  //     setLoading(false);
+  //     setCurrentUser(user);
+  //   } catch (ex) {
+  //     console.log(ex);
+  //     setLoading(false);
+  //     setCurrentUser({});
+  //   }
+  // };
   // Utility method to get a single user's repositories
   const getRepos = async username => {
     setLoading(true);
@@ -57,16 +55,15 @@ const App = () => {
 
   // Utility method to clear the users
 
-  const clearUsers = () => {
-    // console.log("inside the clearUsers method");
-    setLoading(false);
-    setUsers([]);
-  };
+  // const clearUsers = () => {
+  //   // console.log("inside the clearUsers method");
+  //   setLoading(false);
+  //   setUsers([]);
+  // };
 
   // Utility method to set the alert
 
   const showAlert = alertMessage => {
-    setUsers([]);
     setLoading(false);
     setError(alertMessage);
     setAlert(true);
@@ -97,12 +94,8 @@ const App = () => {
                 path="/"
                 render={props => (
                   <Fragment>
-                    <SearchBar
-                      setAlert={showAlert}
-                      show={!!users.length}
-                      clearUsers={clearUsers}
-                    />
-                    <Users loading={loading} users={users} />
+                    <SearchBar setAlert={showAlert} />
+                    <Users />
                   </Fragment>
                 )}
               />
@@ -114,10 +107,7 @@ const App = () => {
                   <PageUser
                     getRepos={getRepos}
                     {...props}
-                    getUser={getUser}
-                    user={currentUser}
                     repos={repos}
-                    loading={loading}
                   />
                 )}
               />

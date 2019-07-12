@@ -1,32 +1,36 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Spinner from '../layouts/Spinner';
 import { Link } from 'react-router-dom';
 import Repos from '../repos/Repos';
+import GithubContext from '../../contexts/github/GithubContext';
 const PageUser = ({
-  user: {
-    name,
-    avatar_url,
-    location,
-    company,
-    bio,
-    blog,
-    login,
-    html_url,
-    followers,
-    following,
-    public_repos,
-    public_gists,
-    hireable
-  },
-  loading,
   repos,
-  getUser,
   getRepos,
   match: {
     params: { id }
   }
 }) => {
+  const {
+    user: {
+      name,
+      avatar_url,
+      location,
+      company,
+      bio,
+      blog,
+      login,
+      html_url,
+      followers,
+      following,
+      public_repos,
+      public_gists,
+      hireable
+    },
+    loading,
+    getUser
+  } = useContext(GithubContext);
+
   useEffect(() => {
     getUser(id);
     getRepos(id);
@@ -105,11 +109,8 @@ const PageUser = ({
   }
 };
 PageUser.propTypes = {
-  getUser: PropTypes.func.isRequired,
   getRepos: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
-  repos: PropTypes.array.isRequired,
-  loading: PropTypes.bool.isRequired
+  repos: PropTypes.array.isRequired
 };
 
 export default PageUser;
